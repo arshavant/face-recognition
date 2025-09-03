@@ -1,10 +1,8 @@
-
-
 # face-recognition
 
 **Unlock the power of Python + OpenCV in just a single command.**
 
-
+---
 
 ## Snapshot
 
@@ -51,5 +49,3 @@ python main.py
 * **Learning-Focused**: Perfect for students and devs getting hands-on with OpenCV and Python.
 
 
-
-Need help adding demos, badges, or GitHub Actions? Just say the word—happy to jazz it up!
