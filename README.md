@@ -1,10 +1,10 @@
----
+
 
 # face-recognition
 
 **Unlock the power of Python + OpenCV in just a single command.**
 
----
+
 
 ## Snapshot
 
