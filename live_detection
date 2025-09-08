@@ -1,0 +1,36 @@
+import cv2
+from model import Model
+
+class LiveDetection:
+    def __init__(self, camera_index: int = 0):
+        self.camera = cv2.VideoCapture(camera_index)
+
+    def recognize(self, window_title: str = "Live Detection"):
+        model = Model()
+
+        if not model.load_model():
+            print("No model to load.")
+            return
+
+        while True:
+            ret, frame = self.camera.read()
+            if not ret:
+                continue
+
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = model.face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
+
+            for (x, y, w, h) in faces:
+                cropped = cv2.resize(gray[y:y + h, x:x + w], model.face_size)
+                name, confidence = model.predict(cropped)
+
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                cv2.putText(frame, f"{name}, {confidence:.1f}%", (x, y - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+
+            cv2.imshow(window_title, frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        self.camera.release()
+        cv2.destroyAllWindows()
