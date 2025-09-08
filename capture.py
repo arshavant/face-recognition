@@ -1,55 +1,43 @@
 import cv2
-from capture import capture_images
-from model import train_all_users, load_all_users_model, predict_face, face_cascade
+from pathlib import Path
 
-def recognize_all_live(window_name="Live Recognition"):
-    if not load_all_users_model():
-        return
+class Capture:
+    def __init__(self,
+                 model_path: Path = Path("./haarcascade_frontalface_default.xml"),
+                 image_path: Path = Path("./images")):
 
-    camera = cv2.VideoCapture(0)
+        self.camera = cv2.VideoCapture(0)
+        self.face_cascade = cv2.CascadeClassifier(str(model_path))
+        self.image_path = image_path
+        self.count = 0
 
-    while True:
-        ret, frame = camera.read()
-        if not ret:
-            continue
-
+    def process_image(self, frame, face_size=(200, 200)):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
+        faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
 
         for (x, y, w, h) in faces:
-            cropped = cv2.resize(gray[y:y+h, x:x+w], (200, 200))
-            name, confidence = predict_face(cropped)
+            return cv2.resize(gray[y:y + h, x:x + w], face_size)
 
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            cv2.putText(frame, f"{name}, {confidence}%", (x, y-10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+        return None
 
-        cv2.imshow(window_name, frame)
-        if cv2.waitKey(1) == 13:
-            break
+    def run(self, username: str, max_images: int = 200, window_title: str = "Capturing Images..."):
+        user_dir = self.image_path / username
+        user_dir.mkdir(parents=True, exist_ok=True)
 
-    camera.release()
-    cv2.destroyAllWindows()
+        while self.count < max_images:
+            ret, frame = self.camera.read()
+            if not ret:
+                continue
 
+            processed = self.process_image(frame)
+            if processed is not None:
+                cv2.imshow(window_title, processed)
+                cv2.imwrite(str(user_dir / f"{self.count}.jpg"), processed)
+                self.count += 1
 
-if __name__ == "__main__":
-    while True:
-        print("\nMenu:")
-        print(" [c] Capture Images")
-        print(" [t] Train Model")
-        print(" [l] Live Recognition")
-        print(" [q] Quit")
-        choice = input("Choose an option: ").lower()
+            if cv2.waitKey(1) & 0xFF == 13:
+                break
 
-        if choice in ("c", "capture"):
-            username = input("Enter username: ").lower()
-            capture_images(username)
-        elif choice in ("t", "train"):
-            train_all_users()
-        elif choice in ("l", "live"):
-            recognize_all_live()
-        elif choice in ("q", "quit"):
-            print("Exiting...")
-            break
-        else:
-            print("Invalid choice. Try again.")
+        self.camera.release()
+        cv2.destroyAllWindows()
+        print(f"Captured {self.count} images for {username}")
