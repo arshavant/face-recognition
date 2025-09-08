@@ -1,51 +1,76 @@
-# face-recognition
-
-**Unlock the power of Python + OpenCV in just a single command.**
+Got it 🚀 Here’s a **fresh, fully new, compact README** for your repo — no recycling from the old one:
 
 ---
 
-## Snapshot
+````
+# 🔎 Face Recognition
 
-A minimalist yet powerful tool for face detection and recognition. Built with Python and OpenCV, this project lets you detect faces using a pre-trained Haar cascade and match them with recognition logic wrapped neatly in `model.py`.
+A lightweight Python project to capture, train, and recognize faces using OpenCV.  
+Perfect for learning the basics of computer vision and real-time recognition.
 
 ---
 
-## Quick Start
+## ⚡ Features
+- 📸 Capture face images directly from webcam  
+- 🧠 Train a recognition model on your dataset  
+- 🎥 Run live detection & recognition in real time  
+- 🛠️ Modular structure (capture / model / live detection)  
+
+---
+
+## 🛠️ Installation
 
 ```bash
 git clone https://github.com/arshavant/face-recognition.git
 cd face-recognition
-pip install opencv-python opencv-contrib-python
+pip install opencv-python opencv-contrib-python numpy
+````
+---
+
+## 🚀 Usage
+
+Run the script and choose an option:
+
+```bash
 python main.py
 ```
 
-*That’s it — your face-recognition journey begins.*
+Options:
+
+* **c** → Capture images
+* **t** → Train model
+* **l** → Live detection
+* **q** → Quit
 
 ---
 
-## What’s Inside
+## 📂 Project Structure
 
-| File                                  | Description                                           |
-| ------------------------------------- | ----------------------------------------------------- |
-| `main.py`                             | The heart of the app: handles detection + recognition |
-| `model.py`                            | Face recognition logic—plug in your own model here!   |
-| `config.py`                           | Optional: store settings like thresholds/data paths   |
-| `haarcascade_frontalface_default.xml` | Pre-trained detector from OpenCV                      |
-
----
-
-## How It Works
-
-1. **Detect** faces in the input image using the Haar cascade.
-2. **Recognize** using the logic in `model.py` (e.g., feature matching, classification).
-3. **Optional**: Tune detection or recognition settings via `config.py`.
+```
+face-recognition/
+│── main.py              # Menu & entry point
+│── capture.py           # Capture images from webcam
+│── model.py             # Train & store recognition model
+│── live_detection.py    # Real-time face detection & recognition
+│── data/                # Stored face images & models
+```
 
 ---
 
-## Why You'll Love It
+## 🎯 Roadmap
 
-* **Light & Clean**: Just the essentials—no extra noise.
-* **Modular**: Flexible architecture, ready for feature expansion (think deep learning, video, UI).
-* **Learning-Focused**: Perfect for students and devs getting hands-on with OpenCV and Python.
+* [ ] Improve recognition accuracy with deep learning
+* [ ] Add support for multiple users
+* [ ] Web-based dashboard
 
+---
 
+## 🤝 Contributing
+
+PRs are welcome! Fork, tweak, and send a pull request.
+
+---
+
+## 📜 License
+
+MIT License — free to use, share, and modify.
